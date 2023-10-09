@@ -45,5 +45,6 @@ blablablabla' <br>
 # TODO
 1. Make a better code :poop:
 2. Refact the code ♻️
-3. Add to <code>env.py</code> a variable <code>OPENAI_PROMPT</code> to a better access to modify it 🔨
-4. Add speech AI 🤖
+3. Change de Endpoint <code>/process</code> to <code>/train</code> ⏰
+4. Add to <code>env.py</code> a variable <code>OPENAI_PROMPT</code> to a better access to modify it 🔨
+5. Add speech AI 🤖
