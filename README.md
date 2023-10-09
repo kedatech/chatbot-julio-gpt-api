@@ -5,7 +5,7 @@ This is a chatbot API for Julio_GPT made with Python using the Flask framework
 
 1. Initialize your virtual environment
 2. Install the dependencies in the requirements.txt file
-3. in the <code>env.py</code> file enter your <code>OPENAI_API_KEY</code> from the OpenAI key and the url of your Flask server in <code>BACKEND_SERVER</code>
+3. Make a file named:<code>env.py</code> and enter this variables: your <code>OPENAI_API_KEY</code> from the OpenAI key and the url of your Flask server in <code>BACKEND_SERVER</code>
 5. Upload your Markdown files with which you will train your AI into the <code>Markdowns</code> directory, the AI will take the first topic "#" as a reference and finish that section (embbeding) with "###" so classify your sections or themes well
 4. Train AI by request to <code>/process</code>
 5. Ask your question with a request to <code>/query?text=</code>
