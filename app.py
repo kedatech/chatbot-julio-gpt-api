@@ -6,9 +6,9 @@ from flask_cors import CORS
 from openai_client import queryEmbeddings
 from process import process_files, query_collection
 
-__import__('pysqlite3')
-import sys
-sys.modules["sqlite3"] = sys.modules.pop("pysqlite3")
+#__import__('pysqlite3')
+#import sys
+#sys.modules["sqlite3"] = sys.modules.pop("pysqlite3")
 
 app = Flask(__name__)
 CORS(app)
