@@ -1,5 +1,6 @@
 import chromadb
 from chromadb.config import Settings
+from gradio_client import Client
 import glob
 
 document_id = 1
@@ -52,6 +53,13 @@ def split_text(file):
     separator = "\n### "
     return file.split(separator)
 
+def speechTotext():
+    client = Client("https://sandiago21-automatic-speech-recognition-spanish.hf.space/")
+    result = client.predict(
+        "audios/sample.ogg",	# str (filepath or URL to file) in 'filepath' Audio component
+        api_name="/predict")
+    print("Speeched: ", result)
+    return result
 
 def query_collection(query):
     collection = chroma_client.get_or_create_collection(name="julio_collections")

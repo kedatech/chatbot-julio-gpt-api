@@ -1,12 +1,21 @@
 import os
 import json
+
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from openai_client import queryEmbeddings
-from process import process_files, query_collection
+from process import process_files, query_collection, speechTotext
+
+from dotenv import load_dotenv
+
+# Cargar variables de entorno desde el archivo .env
+load_dotenv()
+
 
 app = Flask(__name__)
 CORS(app)
+
+app.config['OPENAI_API_KEY'] = os.environ.get('OPENAI_API_KEY')
 
 @app.route('/process', methods=['POST'])
 def process():
@@ -14,9 +23,6 @@ def process():
     process_files(archivos)
     response = {'success': True}
     return jsonify(response)
-
-
-
 
 @app.route('/query', methods=['GET'])
 async def query():
@@ -26,6 +32,15 @@ async def query():
 
     return jsonify(json.loads(response))
 
+
+@app.route("/speech", methods=['GET'])
+async def speech():
+    return "This is a construct request 🔨"
+    # query = request.args.get('text')
+    # collections = query_collection(query)
+    # response = await queryEmbeddings(query, collections)
+
+    # return jsonify(json.loads(response))
 
 if __name__ == '__main__':
     app.run()

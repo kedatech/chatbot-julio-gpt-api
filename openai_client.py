@@ -1,10 +1,13 @@
+import os
 import openai
 import json
-from env import BACKEND_SERVER, OPENAI_API_KEY  # Asegúrate de que esta variable contenga la URL correcta
+from env import OPENAI_API_KEY  # Asegúrate de que esta variable contenga la URL correcta
 import re
 import urllib.parse
+from dotenv import load_dotenv
 
-openai.api_key = OPENAI_API_KEY
+load_dotenv()
+openai.api_key = os.environ.get("OPENAI_API_KEY")
 
 def create_chat_completion(document, question):
     messages = []

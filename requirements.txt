@@ -3,3 +3,4 @@ flask[async]
 flask_cors
 openai
 chromadb
+gunicorn 
