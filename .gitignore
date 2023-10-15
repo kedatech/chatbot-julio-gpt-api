@@ -1,6 +1,8 @@
 .flaskenv
 venv/
 .venv/
+env*
+.env
 dist/
 build/
 *.egg
