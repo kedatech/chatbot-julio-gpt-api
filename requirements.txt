@@ -3,4 +3,5 @@ flask[async]
 flask_cors
 openai
 chromadb
+python-decouple
 gunicorn 

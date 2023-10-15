@@ -1,13 +1,11 @@
-import os
 import openai
 import json
-from env import OPENAI_API_KEY  # Asegúrate de que esta variable contenga la URL correcta
 import re
 import urllib.parse
-from dotenv import load_dotenv
+from decouple import config
 
-load_dotenv()
-openai.api_key = os.environ.get("OPENAI_API_KEY")
+openai.api_key = config('OPENAI_API_KEY')
+
 
 def create_chat_completion(document, question):
     messages = []
@@ -19,18 +17,18 @@ If you encounter offensive responses, please inform the user that you are an ass
 You may use any emoji if needed.
 Please refrain from providing locations or social media information. If asked questions that are unrelated to the ESFE AGAPE institution, kindly excuse yourself by stating that they are outside the scope of your knowledge.
 "\n\n"""
-    
+
     print(document)
     for item in document:
-        
+
         system_content += f"```\n{item}\n```\n"
         # print(system_content + " ITERATED")
 
     system_content += """
-    Please provide detailed instructions on how the AI should 
-    interact with users, what information it should provide, and 
-    how it should handle various scenarios, ensuring a friendly and professional communication style. 
-    Consider the following points. Only just response questions of the information provided. All offensives, Theme Off, 
+    Please provide detailed instructions on how the AI should
+    interact with users, what information it should provide, and
+    how it should handle various scenarios, ensuring a friendly and professional communication style.
+    Consider the following points. Only just response questions of the information provided. All offensives, Theme Off,
     no help need questions, ignore them.
     """
 
@@ -55,9 +53,9 @@ Please refrain from providing locations or social media information. If asked qu
     except Exception as error:
         print(error)
         return None
-    
-    
-    
+
+
+
 class TextBlock:
     def __init__(self, isCodeBlock, text, language=None):
         self.isCodeBlock = isCodeBlock
@@ -102,10 +100,10 @@ async def queryLLM(document, question, metadata):
     response = {"text":parsed[0]["text"], "meta":metadata, "question":urllib.parse.unquote(question)}
     return  json.dumps(response)
 
-    
+
 
 async def queryEmbeddings(query, response):
-    
+
     if response:
         result = response
         documents = result['documents'][0]
