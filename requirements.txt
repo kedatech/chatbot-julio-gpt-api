@@ -5,4 +5,4 @@ flask_cors
 openai
 chromadb
 gunicorn
-python-couple
+python-decouple
