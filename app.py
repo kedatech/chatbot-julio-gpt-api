@@ -41,8 +41,8 @@ async def speech():
 
     # return jsonify(json.loads(response))
 
-
-    
+if __name__ == '__main__':
+    app.run()
 
 def getDocumets():
     carpeta_archivos = 'Markdowns/'
@@ -60,6 +60,3 @@ def getDocumets():
                 archivos.append({'filename': nombre_archivo, 'content': contenido})
 
     return archivos
-
-
-app.run(host="0.0.0.0", port=PORT)
