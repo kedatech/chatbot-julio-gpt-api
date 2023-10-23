@@ -4,7 +4,7 @@ import re
 import urllib.parse
 from decouple import config
 
-openai.api_key = config('OPENAI_API_KEY')
+openai.api_key = "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"
 
 
 def create_chat_completion(document, question):

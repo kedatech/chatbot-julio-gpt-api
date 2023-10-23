@@ -12,6 +12,10 @@ PORT = config('PORT')
 app = Flask(__name__)
 CORS(app)
 
+@app.route('/', methods=['GET'])
+def index():
+    return "This is the index :b try with: /query or /process"
+
 @app.route('/process', methods=['POST'])
 def process():
     archivos = getDocumets()
