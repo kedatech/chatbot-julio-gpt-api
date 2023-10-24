@@ -5,9 +5,9 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from openai_client import queryEmbeddings
 from process import process_files, query_collection, speechTotext
-from decouple import config
+# from decouple import config
 
-PORT = config('PORT')
+# PORT = config('PORT')
 
 app = Flask(__name__)
 CORS(app)
@@ -42,7 +42,7 @@ async def speech():
     # return jsonify(json.loads(response))
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host="0.0.0.0")
 
 def getDocumets():
     carpeta_archivos = 'Markdowns/'
