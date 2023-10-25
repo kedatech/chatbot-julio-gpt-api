@@ -5,22 +5,23 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from openai_client import queryEmbeddings
 from process import process_files, query_collection, speechTotext
-# from decouple import config
-
-# PORT = config('PORT')
 
 app = Flask(__name__)
 CORS(app)
 
 @app.route('/', methods=['GET'])
 def index():
-    return "This is the index :b try with: /query or /process"
+    return "This is the index try with: /query or /train"
 
 @app.route('/process', methods=['POST'])
 def process():
+    return "<h1>This route was replaced to /train</h1>"
+
+@app.route('/train', methods=['POST'])
+def train():
     archivos = getDocumets()
     process_files(archivos)
-    response = {'success': True}
+    response = {'AI Training succes': True}
     return jsonify(response)
 
 @app.route('/query', methods=['GET'])

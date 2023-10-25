@@ -23,8 +23,6 @@ def process_files(documents):
         generate_embeddings(chunks, document_title, file["filename"], collection)
         print(chunks," ",document_title, " ",file["filename"])
     
-
-
 def generate_embeddings(chunks, document_title, file_name, collection):
     global document_id
     for chunk in chunks:
@@ -38,8 +36,6 @@ def generate_embeddings(chunks, document_title, file_name, collection):
         )
         
         document_id += 1
-        
-    # print("Embedding: ", collection)
 
 def get_title(file):
     lines = file.split("\n")
@@ -56,7 +52,7 @@ def split_text(file):
 def speechTotext():
     client = Client("https://sandiago21-automatic-speech-recognition-spanish.hf.space/")
     result = client.predict(
-        "audios/sample.ogg",	# str (filepath or URL to file) in 'filepath' Audio component
+        "audios/sample.ogg",	
         api_name="/predict")
     print("Speeched: ", result)
     return result
