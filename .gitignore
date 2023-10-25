@@ -1,5 +1,6 @@
 .flaskenv
 venv/
+.local_db/
 local_db/
 .venv/
 env*
