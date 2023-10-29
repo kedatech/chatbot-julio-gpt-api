@@ -3,7 +3,7 @@ import json
 
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from openai_client import queryEmbeddings
+from openai_client import queryEmbeddings, create_chat_completion
 from process import process_files, query_collection, speechTotext
 
 app = Flask(__name__)
