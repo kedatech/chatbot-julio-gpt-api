@@ -103,11 +103,14 @@ async def queryLLM(document, question, metadata, initial_message=False):
     parsed = parse_text(answer)
     chat_res = parsed[0]["text"]
     offensive = chat_res == "Este mensaje ofensivo será reportado a coordinación."
-    if not initial_message: 
-        response = {"chat_response":chat_res, "offensive_message":offensive, "meta":metadata, "question":urllib.parse.unquote(question)}
-    else:
-        response = {"chat_response":chat_res, "offensive_message":offensive, "meta":[], "question":""}
-
+    if initial_message: 
+        metadata = []
+        question = ""
+    if offensive:
+        metadata = []
+        
+    response = {"chat_response":chat_res, "offensive_message":offensive, "meta":metadata, "question":urllib.parse.unquote(question)}
+    
     return  json.dumps(response)
 
 
