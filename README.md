@@ -1,50 +1,162 @@
-# chatbot-julio-gpt-api
-This is a chatbot API for Julio_GPT made with Python using the Flask framework
+# ChatBot Julio-GPT
+Esta es una API de chatbot para Julio_GPT hecha con Python usando el micro-framework Flask
 
-# Use
+# Uso
 
-1. Initialize your virtual environment
-2. Install the dependencies in the requirements.txt file
-3. Make a file named:<code>env.py</code> and enter this variables: your <code>OPENAI_API_KEY</code> from the OpenAI key and the url of your Flask server in <code>BACKEND_SERVER</code>
-4. Upload your Markdown files with which you will train your AI into the <code>Markdowns</code> directory, the AI will take the first topic "#" as a reference and finish that section (embbeding) with "###" so classify your sections or themes well
-5. In the console run: <code>flask --app app.py --debug run</code>
-6. Train AI by request to <code>/train</code>
-7. Ask your question with a request to <code>/query?text=</code>
-8. Ready!
+## Entorno Virtual Python
+Crea un entorno virtual en python >= 3.12 con:
+```cmd
+python -m venv venv
+```
+O crea un entorno virtual en python <= 3.11 con:
+```cmd
+python -m virtualenv venv
+```
+O crea un entorno virtual con una version de python específica:
+```cmd
+python -m virtualenv -p ubicacion/exe/python venv
+```
+Activa el entorno virtual
+```cmd
+venv/Scripts/activate
+```
+Puedes desactivarlo con
+```cmd
+deactivate
+```
+
+## Dependencias
+Instala las dependencias
+```cmd
+python install -r requirements.txt
+```
+Crea un archivo llamado <code>.env</code> y agrega estas variables
+```cmd
+PORT -> es el puerto de la app, docker: 80/Flask: 5000
+LOCAL_URL -> es el host local: docker: '0.0.0.0'/ Flask: '127.0.0.1'
+OPENAI_API_KEY -> es tu Token de OpenAI API
+```
+Ahora sube tus archivos Markdown con el que entrenaremos a la IA en la carpeta <code>Markdowns</code>
+
+## Inicializar API
+En tu consola ejecuta
+```cmd
+flask --app app.py --debug run
+```
+
+Entrena la IA enviando una petición <code>GET</code> a <code>/train</code>
+
+Si has subido los archivos Markdown y las dependencias están correctas recibirás esta respuesta
+```json
+"IA entrenada correctamente."
+```
+
+Ahora puedes hacer una petición <code>GET</code> a <code>/query?text=</code> para interactuar con la IA, debes mandar tu pregunta o query por <code>params</code>
+
+Algo como esto
+```url
+localhost:5000/query?text=hola mundo
+```
+
+Si todo está bien recibirás como respuesta un formato como este
+```json
+{
+  "chat_response": "¡Hola!",
+  "meta": [
+    {
+      "document_title": "titulo-1",
+      "file_name": "documento1.md"
+    },
+    {
+      "document_title": "titulo-3",
+      "file_name": "documento2.md"
+    }
+  ],
+  "offensive_message": false,
+  "question": "hola mundo"
+}
+```
+Y eso es todo!
 
 # Endpoints
 
-<code>/train</code> -> the process to train your AI <br>
-<code>/query?text=</code> -> this endpoint makes a question to your AI, send your question by the args
+## /init [GET]
+Este endpoint es para inciar un nuevo chat, a diferencia de ```/query``` en este endpoint la IA saludará y dará una breve introducción como su nombre y sus servicios
 
-# About it
+### Respuesta
+```json
+{
+  "chat_response": "¡Hola! Soy Julio la Capibara, el asistente de ESFE Agape. ¿En qué puedo ayudarte hoy? 😊",
+  "meta": [],
+  "offensive_message": false,
+  "question": ""
+}
+```
+## /train [GET]
+Este endpoint entrenará a la IA en base a los archivos Markdowns proporcionados, si la carpeta está vacía, la IA no tendrá ningun recurso al que acudir y solo funcionará la pura IA de Openai
+### Respuesta
+```json
+"IA entrenada correctamente"
+```
 
-## Project description
-the project is made with Flask, the project is a simple API that communicates with two services: OpenAI and ChromaDb.
-ChromaDB serves as a vector database and thus create embeddings, which is expensive in terms of tokens or use refers to the OpenAI API, instead OpenAI is used in conjunction with the project in order to respond sensibly and conditionally with the indicated training
+## /query?text= [GET]
+Este endpoint es para interactuar con la IA y hacerle consultas con respecto a cualquier tema relacionado al entrenamiento. La pregunta se debe enviar por params.
 
-## Training
-The training is based on using Markdown files with the content you want to train, it can be kitchen items or the desired theme. AI will understand and train
+### Respuesta
+```json
+{
+  "chat_response": "¡Hola! El precio para la apertura del servicio social es de $5, a menos que seas becado. ¿Hay algo más en lo que pueda ayudarte? 😊",
+  "meta": [
+    {
+      "document_title": "Todo sobre el servicio social",
+      "file_name": "ch1-servicio-social.md"
+    }
+  ],
+  "offensive_message": false,
+  "question": "¿Hola, sabes el precio del servicio social?"
+}
+```
 
-The AI will seek to classify the files by the main theme or h1 of the Markdowns which is "#", so your topic must be concise and clear so that the AI is easier to save and search for that topic
+En caso de que el texto que se haya enviado sea ofensivo, la IA lo hará saber con la siguiente respuesta
+```json
+{
+  "chat_response": "Este mensaje ofensivo será reportado a coordinación.",
+  "meta": [],
+  "offensive_message": true,
+  "question": "idiota"
+}
+```
 
-The AI will separate each topic or section (embedding) by a sub-sub-topic or a "###", from there, the AI will take the previous text as a separate section or topic and take the new one as a new section or topic. Eg :
+# Sobre el Proyecto
 
-'# Methods to center a div <br>
-blablablabla' <br>
-'###'
-'# How to import this into JS' <br>
-'blablabla. "'
+## Descripción general
+El proyecto se realiza con Flask, el proyecto es una API simple que se comunica con dos servicios: OpenAI y ChromaDb.
+ChromaDB sirve como una base de datos vectorial y, por lo tanto, crea incrustaciones o embeddings, lo cual es costoso en términos de tokens o el uso se refiere a la API OpenAI, en cambio, OpenAI se usa junto con el proyecto para responder de manera sensata y condicional con la capacitación indicada
 
-# Sources to view
+## Entrenamiento
+El entrenamiento se basa en el uso de archivos Markdown con el contenido que desea entrenar, pueden ser elementos de cocina o el tema deseado, la IA lo entenderá y entrenará
+
+La IA buscará clasificar los archivos por el tema principal o h1 de los Markdowns, que es "#", por lo que su tema debe ser conciso y claro para que la IA sea más fácil de guardar y buscar ese tema
+
+La IA separará cada tema o sección (incrustación) por un subtema o un "###", a partir de ahí, la IA tomará el texto anterior como una sección o tema separado y tomará el nuevo como una nueva sección o tema. Por ejemplo :
+```md
+# Métodos para centrar un div
+blablablabla
+### -> SEPARACION
+
+# Cómo importar esto a JS -> Nuevo Tema
+blablabla.
+```
+
+# Resursos a los que acudir
 
 <strong>Flask</strong>: <https://flask.palletsprojects.com/en/3.0.x/>  <br>
 <strong>ChromaDB</strong>: <https://docs.trychroma.com/> <br>
 <strong>OpenAI</strong>: <https://platform.openai.com/> <br>
 
-# TODO
-1. Make a better code :poop:
-2. Refact the code ♻️
-3. ~~Change de Endpoint <code>/process</code> to <code>/train</code> ⏰~~
-4. Add to <code>.env</code> a variable <code>OPENAI_PROMPT</code> to a better access to modify it 🔨
-5. Add speech AI 🤖
+# TO-DO
+## 1. Refactorizar el código ♻️
+## 2. Añadir a .env una variable ```OPENAI_PROMPT``` para que sea más sencillo modificar el condicionamiento de la IA 🔨
+## 3. Implementar dictado por audios 🤖
+## 4. Permitir que la IA proporcione recursos como Links, Imágenes o artículos de utilidad 📖
+
