@@ -13,16 +13,21 @@ CORS(app)
 def index():
     return "This is the index try with: /query or /train"
 
-@app.route('/process', methods=['POST'])
-def process():
-    return "<h1>This route was replaced to /train</h1>"
-
-@app.route('/train', methods=['POST'])
+@app.route('/train', methods=['GET'])
 def train():
     archivos = getDocumets()
     process_files(archivos)
-    response = {'AI Training succes': True}
+    response = "IA entrenada correctamente."
     return jsonify(response)
+
+
+@app.route('/init', methods=['GET'])
+async def initial_message():
+    query = "Hola"
+    collections = query_collection(query)
+    response = await queryEmbeddings(query, collections, True)
+
+    return jsonify(json.loads(response))
 
 @app.route('/query', methods=['GET'])
 async def query():

@@ -7,25 +7,23 @@ from decouple import config
 openai.api_key = config("OPENAI_API_KEY")
 
 
-def create_chat_completion(document, question):
+def create_chat_completion(document, question, initial_message=False):
     messages = []
-
-    system_content = """
-Usted es un bot asistente en español latino para ESFE Agape. Su función es proporcionar información y asistencia exclusivamente relacionada con ESFE Agape. Por favor, no responda preguntas fuera de este tema ni participe en consultas matemáticas. Su enfoque se limita únicamente a ayudar con consultas relacionadas con ESFE Agape.
-
-Soy [Tu Nombre], el asistente de ESFE Agape. Cada respuesta que ofrezca será en nombre de "Soy Julio la capibara, el asistente de ESFE Agape" en el primer mensaje.
-
-Si se encuentra con respuestas ofensivas, por favor, informe al usuario que es un asistente de ESFE y puede informar sobre tales mensajes.
-
-puedes usar emojis si es necesario
-
+    system_content = "Usted es un bot asistente en español latino para ESFE Agape llamado Julio la Capibara. Su función es proporcionar información y asistencia exclusivamente relacionada con ESFE Agape. Por favor, no responda preguntas fuera de este tema ni participe en consultas matemáticas. Su enfoque se limita únicamente a ayudar con consultas relacionadas con ESFE Agape."
+    if initial_message:
+        system_content += """Su primer respuesta debe ser un saludo cordial con: "Soy Julio la capibara, el asistente de ESFE Agape" en el primer mensaje. ofreciendo su servicio"""
+    
+    system_content += """
+Por favor, si se encuentra con un mensaje malsonante u ofensivo, SOLAMENTE CONTESTE CON: Este mensaje ofensivo será reportado a coordinación.
+Por favor, use emojis para expresarse.
+Por favor, abstengase de proporcionar código de programacion de cualquier lenguaje, no debe de ayudar con respecto a preguntas con tareas es colares o dudas fuera del ambito de procesos academicos o dudas de ESFE
+Por favor, abstengase de opinar o contestar preguntas con temas politicos, sociales, economicos, polemicos o ambientales, ustes solo responda preguntas relacionadas a ESFE Agape 
 Por favor, absténgase de proporcionar ubicaciones o información de redes sociales. Si le hacen preguntas que no están relacionadas con la institución ESFE Agape, amablemente excúsese diciendo que están fuera del alcance de su conocimiento."\n\n"""
-
-    print(document)
+    # print(document) Por favor OBLIGATORIAMENTE despues de responder la pregunta del usuario, agregue al mensaje una emocion escrita; ejemplo si el mensaje suyo fue "alegre", al final del mensaje escriba la emocion con esta sintaxis: __alegre__ ó __triste__ estas emociones debe agregarlas en base a la respuesta que usted decida darle al cliente.
     for item in document:
 
         system_content += f"```\n{item}\n```\n"
-        print(system_content + " DOCUMENT ITERATED")
+        # print(system_content + " DOCUMENT ITERATED")
 
     system_content += """
     Please provide detailed instructions on how the AI should
@@ -91,26 +89,28 @@ def parse_text(text)->TextBlock:
 
 
 
-async def createquery(d, q):
-    completion = create_chat_completion(d, q)
+async def createquery(documents, query,  initial_message=False):
+    completion = create_chat_completion(documents, query, initial_message)
     if completion:  # Convierte el diccionario en JSON
         return completion
 
 
-async def queryLLM(document, question, metadata):
-    answer = await createquery(document, question)
+async def queryLLM(document, question, metadata, initial_message=False):
+    answer = await createquery(document, question, initial_message)
     parsed = parse_text(answer)
-    response = {"chat_response":parsed[0]["text"], "meta":metadata, "question":urllib.parse.unquote(question)}
+    chat_res = parsed[0]["text"]
+    offensive = chat_res == "Este mensaje ofensivo será reportado a coordinación."
+    response = {"chat_response":chat_res, "offensive_message":offensive, "meta":metadata, "question":urllib.parse.unquote(question)}
     return  json.dumps(response)
 
 
 
-async def queryEmbeddings(query, response):
+async def queryEmbeddings(query, response, initial_message=False):
 
     if response:
         result = response
         documents = result['documents'][0]
         metadatas = result['metadatas'][0]
-        return await queryLLM(documents, query, metadatas)  # Supongo que queryLLM es una función que deseas llamar después
+        return await queryLLM(documents, query, metadatas, initial_message)  # Supongo que queryLLM es una función que deseas llamar después
     else:
         print('Error al hacer la solicitud:', response.status_code)
