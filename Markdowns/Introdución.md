@@ -1,4 +1,6 @@
 # Introducción
+## Rector de la Institucioón
+El rector de ESFE Agape es el Ing. Ramón Alberto Vega Calvo –MADE
 ## Ideario
 La Escuela Superior Franciscana Especializada/AGAPE, expresa en
 este Ideario su filosofía y los objetivos generales que propone para
