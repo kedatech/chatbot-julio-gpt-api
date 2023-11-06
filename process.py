@@ -4,7 +4,7 @@ from gradio_client import Client
 import glob
 
 document_id = 1
-chroma_client = chromadb.PersistentClient(path="local_db",settings=Settings(allow_reset=True))
+chroma_client = chromadb.PersistentClient(path="/local_collections",settings=Settings(allow_reset=True))
 
 def find_markdowns():
     folder_path = 'Markdowns/'
@@ -13,7 +13,7 @@ def find_markdowns():
     
 
 def process_files(documents):
-    collection = chroma_client.get_or_create_collection(name="julio_collections")
+    collection = chroma_client.create_collection(name="julio_collections")
     
     for file in documents:
         print("processing file: " + file["filename"])
@@ -58,7 +58,7 @@ def speechTotext():
     return result
 
 def query_collection(query):
-    collection = chroma_client.get_or_create_collection(name="julio_collections")
+    collection = chroma_client.get_collection(name="julio_collections")
     return collection.query(
         query_texts=[query],
         n_results=2,
