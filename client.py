@@ -1,7 +1,7 @@
 import requests
 from decouple import config
 
-url = config("LOCAL_URL")+config("PORT")+'/train'
+url = 'http://localhost:80/train'
 
 response = requests.post(url)
 if response.status_code == 200:

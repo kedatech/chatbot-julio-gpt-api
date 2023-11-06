@@ -1,4 +1,10 @@
 # Introducción
+## Info
+
+Colores esfe: azul y blanco
+Rector ESFE: Ingeniero Ramón Alberto Vega Calvo
+Ubicación: Izalco
+
 ## Ideario
 La Escuela Superior Franciscana Especializada/AGAPE, expresa en
 este Ideario su filosofía y los objetivos generales que propone para

@@ -17,4 +17,4 @@ RUN pip install -r requirements.txt
 # CMD ["gunicorn ","--bind","0.0.0.0:80", "app:app"]
 
 # ENTRYPOINT ["./gunicorn.sh"]
-CMD ["gunicorn", "app:app", "-w", "2", "--threads", "2", "-b", "0.0.0.0:80"]
+CMD ["./start.sh"]

@@ -61,5 +61,5 @@ def query_collection(query):
     collection = chroma_client.get_collection(name="julio_collections")
     return collection.query(
         query_texts=[query],
-        n_results=2,
+        n_results=4,
     )
