@@ -4,7 +4,7 @@ from gradio_client import Client
 import glob
 
 document_id = 1
-chroma_client = chromadb.PersistentClient(path="local_db",settings=Settings(allow_reset=True))
+chroma_client = chromadb.HttpClient(host='0.0.0.0', port=8000)
 
 def find_markdowns():
     folder_path = 'Markdowns/'
